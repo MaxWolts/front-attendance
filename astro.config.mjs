@@ -12,5 +12,5 @@ export default defineConfig({
     },
   },
   site: 'https://maxwolts.github.io/front-attendance',
-  base: 'https://github.com/MaxWolts/front-attendance'
+  base: '/front-attendance/'
 });
