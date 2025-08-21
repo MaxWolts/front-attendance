@@ -1,38 +1,56 @@
-name: Deploy to GitHub Pages
+name: Deploy Astro to GitHub Pages
 
 on:
-  # Activa el flujo de trabajo cada vez que hagas push a la rama `main`
-  # Usando un nombre de rama diferente? Reemplaza `main` con el nombre de tu rama
   push:
     branches: [main]
-  # Te permite ejecutar este flujo de trabajo manualmente desde la pestaña Acciones en GitHub.
   workflow_dispatch:
 
-# Permite que este trabajo clone el repositorio y cree un despliegue de página
 permissions:
   contents: read
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout your repository using git
+      # 1️⃣ Hacer checkout del repo
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Install, build, and upload your site
-        uses: withastro/action@v3
+
+      # 2️⃣ Instalar dependencias
+      - name: Install dependencies
+        run: npm ci
+
+      # 3️⃣ Build de Astro con variables de entorno
+      - name: Build Astro site
         env:
           PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.PUBLIC_GOOGLE_CLIENT_ID }}
           PUBLIC_VITE_BACKEND_URL: ${{ secrets.PUBLIC_VITE_BACKEND_URL }}
+        run: npm run build
+
+      # 4️⃣ Guardar el build como artifact (opcional, útil si quieres usarlo en otro job)
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: astro-build
+          path: dist
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # 1️⃣ Descargar el artifact del build
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: astro-build
+          path: dist
+
+      # 2️⃣ Deploy a GitHub Pages
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
