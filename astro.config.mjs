@@ -11,4 +11,6 @@ export default defineConfig({
       rollupOptions: {},
     },
   },
+  site: 'https://maxwolts.github.io/front-attendance',
+  base: 'https://github.com/MaxWolts/front-attendance'
 });
