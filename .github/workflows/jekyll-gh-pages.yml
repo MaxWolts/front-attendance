@@ -20,23 +20,21 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
-
       - name: Install dependencies
         run: npm ci
-
       - name: Build Astro
         env:
           PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.PUBLIC_GOOGLE_CLIENT_ID }}
           PUBLIC_VITE_BACKEND_URL: ${{ secrets.PUBLIC_VITE_BACKEND_URL }}
         run: npm run build
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_PAGES_TOKEN }} # PAT creado en tu repo
           publish_dir: ./dist
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
