@@ -4,9 +4,10 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "clean-dist": "rm -rf dist-clean && cp -R dist dist-clean && rm -rf dist-clean/.cache dist-clean/**/*.DS_Store",
+    "build": "astro build && npm run clean-dist"
   },
   "dependencies": {
     "@astrojs/react": "^4.3.0",

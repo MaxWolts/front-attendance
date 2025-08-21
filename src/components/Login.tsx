@@ -17,7 +17,6 @@ const Login = () => {
         body: JSON.stringify({ token }),
       });
       const data = await res.json();
-      console.log("Usuario verificado:", data.user);
 
       await fetch(backURL+"/api/attendance", {
         method: "POST",

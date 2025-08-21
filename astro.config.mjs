@@ -11,6 +11,6 @@ export default defineConfig({
       rollupOptions: {},
     },
   },
-  site: 'https://maxwolts.github.io/front-attendance',
-  base: '/front-attendance/'
+  site: 'https://front-attendance.vercel.app',
+  base: '', // << vacío para Vercel
 });
