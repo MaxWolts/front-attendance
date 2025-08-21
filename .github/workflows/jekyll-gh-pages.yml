@@ -22,19 +22,20 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Build job
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout your repository using git
+      - name: Checkout repo
         uses: actions/checkout@v4
-      - name: Install, build, and upload your site
-        uses: withastro/action@v3
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Astro
         env:
           PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.PUBLIC_GOOGLE_CLIENT_ID }}
           PUBLIC_VITE_BACKEND_URL: ${{ secrets.PUBLIC_VITE_BACKEND_URL }}
-
-        
+        run: npm run build
 
   # Deployment job
   deploy:
